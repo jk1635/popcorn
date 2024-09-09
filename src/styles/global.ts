@@ -14,9 +14,13 @@ const global = css`
     }
 
     body {
+        font-family: 'Noto Sans KR', sans-serif;
         overflow: hidden;
         font-size: 1rem;
         line-height: 1;
+        font-weight: 400;
+        background-color: #f4f7fe;
+        color: #2b3674;
     }
 
     html,
@@ -30,10 +34,13 @@ const global = css`
     }
 
     button {
-        border: 0;
+        border: none;
+        background: none;
+        padding: 0;
+        cursor: pointer;
     }
 
-    input {
+    input:focus {
         outline: none;
     }
 `;
