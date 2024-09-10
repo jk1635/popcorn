@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 
 import Dashboard from '@assets/home.svg';
+
 import Popcorn from '/popcorn.svg';
 
 const Sidebar = () => {

@@ -40,4 +40,20 @@ export interface Campaign {
     Complete: number;
     Datetime: string;
     Revenue: number;
+    UnitCost?: number;
 }
+
+export interface Option {
+    value: number;
+    label: string;
+}
+
+export type DateInfo = {
+    search_year: number;
+    search_month?: number;
+};
+
+export type SortConfig = {
+    key: keyof Campaign | null;
+    direction: 'ascending' | 'descending';
+};

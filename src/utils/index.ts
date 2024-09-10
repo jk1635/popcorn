@@ -1,3 +1,5 @@
+import { Campaign } from '@/types';
+
 const formatNumber = (number): string => {
     return number.toLocaleString();
 };
@@ -10,8 +12,16 @@ const calculateTotal = (number, key) => {
     return number.reduce((acc, cur) => acc + (cur[key] || 0), 0);
 };
 
-const prepareData = data => {
-    return data?.Monthly.flatMap(month => month.App.flatMap(app => app.Campaign)) || [];
+const prepareData = (data): Campaign[] => {
+    return data?.Monthly.flatMap(
+        month =>
+            month.App.flatMap(app =>
+                app.Campaign.map(campaign => ({
+                    ...campaign,
+                    UnitCost: calculateUnitCost(campaign.Revenue, campaign.Complete),
+                }))
+            ) || []
+    );
 };
 
 export { formatNumber, calculateUnitCost, calculateTotal, prepareData };
