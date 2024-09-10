@@ -5,7 +5,7 @@ import apiClient from '@libs/apiClient';
 import { DateInfo, Response } from '@/types';
 
 const useAdData = () => {
-    return useMutation({
+    const mutation = useMutation({
         mutationFn: async (payload: DateInfo) => {
             const data = await apiClient.post<Response>('/v1/report/demo/GetDemoData', payload);
             return data?.Payment;
@@ -17,6 +17,10 @@ const useAdData = () => {
             console.error(error);
         },
     });
+    return {
+        ...mutation,
+        isLoading: mutation.isLoading,
+    };
 };
 
 export default useAdData;

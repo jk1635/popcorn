@@ -4,14 +4,18 @@ import DashboardIcon from '@assets/home.svg?react';
 import TableIcon from '@assets/table.svg?react';
 
 import PopcornIcon from '/public/popcorn.svg?react';
-import { NavLink } from 'react-router-dom';
+
+import { Link, NavLink } from 'react-router-dom';
+
 import theme from '@styles/theme.ts';
 
 const Sidebar = () => {
     return (
         <SidebarContainer>
             <LogoWrapper>
-                <PopcornIcon width="2rem" height="2rem" fill="#2B3674" />
+                <Link to={'/'}>
+                    <PopcornIcon width="2rem" height="2rem" fill="#2B3674" />
+                </Link>
             </LogoWrapper>
             <LinkList>
                 <Item>
@@ -71,6 +75,7 @@ const Item = styled.li`
     display: flex;
     align-items: center;
     padding: 0.75rem 0 0.75rem 3rem;
+    font-family: 'Inter', sans-serif;
 `;
 
 const Title = styled.span`

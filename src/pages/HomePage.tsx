@@ -5,21 +5,24 @@ import styled from '@emotion/styled';
 import useAdData from '@hooks/useAdData';
 import { ArcElement, CategoryScale, Chart as ChartJS, ChartData, Legend, registerables, Tooltip } from 'chart.js';
 
-import Select from '@components/Select';
+import FilterSection from '@components/FilterSection';
+import Loading from '@components/Loading';
+import SectionBox from '@components/SectionBox';
 
-import { chartColors, initialChartData, monthOptions, options, yearOptions } from '@/constants';
 import { Campaign, Option, SortConfig } from '@/types';
-import { calculateTotal, formatNumber, prepareData } from '@/utils';
-import ArrowDown from '@assets/arrow-down.svg';
-import ArrowUp from '@assets/arrow-up.svg';
+import ArrowDownIcon from '@assets/arrow-down.svg?react';
+import ArrowUpIcon from '@assets/arrow-up.svg?react';
+import { chartColors, initialChartData, options } from '@constants/';
+import { calculateTotal, formatNumber, prepareData } from '@utils/';
 
 ChartJS.register(CategoryScale, Tooltip, Legend, ArcElement, ...registerables);
 
 const HomePage = () => {
     const { data, mutate } = useAdData();
+
     const [campaignData, setCampaignData] = useState<Campaign[]>([]);
     const [chartData, setChartData] = useState<ChartData<'pie', number[], string>>(initialChartData);
-    const [yearState, setYearState] = useState<number>(2021);
+    const [yearState, setYearState] = useState<number>(2018);
     const [monthState, setMonthState] = useState<number>(1);
     const [sortConfig, setSortConfig] = useState<SortConfig>({
         key: null,
@@ -43,8 +46,8 @@ const HomePage = () => {
             const preparedData = prepareData(data);
             setCampaignData(preparedData);
 
-            const campaignNames = preparedData.map(campaign => campaign.CampaignName);
-            const revenues = preparedData.map(campaign => campaign.Revenue);
+            const campaignNames = preparedData.map((campaign: Campaign) => campaign.CampaignName);
+            const revenues = preparedData.map((campaign: Campaign) => campaign.Revenue);
 
             setChartData({
                 labels: campaignNames,
@@ -67,7 +70,7 @@ const HomePage = () => {
             };
             mutate(params);
         }
-    }, [yearState, monthState, mutate]);
+    }, [yearState, monthState]);
 
     const handleSort = (key: keyof Campaign) => {
         setSortConfig(prev => {
@@ -111,135 +114,94 @@ const HomePage = () => {
 
     return (
         <>
-            <TopWrapper>
-                <SubTitle>Report</SubTitle>
-                <SelectWrapper>
-                    <Select
-                        options={yearOptions}
-                        value={yearOptions.find(option => option.value === yearState) || null}
-                        onChange={handleYearChange}
-                        placeholder="Select Year"
-                    />
-                    <Select
-                        options={monthOptions}
-                        value={monthOptions.find(option => option.value === monthState) || null}
-                        onChange={handleMonthChange}
-                        placeholder="Select Month"
-                    />
-                </SelectWrapper>
-            </TopWrapper>
-
-            <GraphBox>
-                <BoxTitle>캠페인별 수익 비율</BoxTitle>
-                <ChartWrapper>
-                    <Pie options={options} data={chartData} />
-                </ChartWrapper>
-            </GraphBox>
-            <TableBox>
-                <BoxTitle>캠페인별 완료 건수 & 수익</BoxTitle>
-                <Table>
-                    <Thead>
-                        <Tr>
-                            <HeaderTh onClick={() => handleSort('CampaignName')}>
-                                <div className="title">
-                                    캠페인명
-                                    <ArrowIcon
-                                        src={
-                                            sortConfig.key === 'CampaignName' && sortConfig.direction === 'ascending'
-                                                ? ArrowUp
-                                                : ArrowDown
-                                        }
-                                    />
-                                </div>
-                            </HeaderTh>
-                            <HeaderTh onClick={() => handleSort('UnitCost')}>
-                                <div className="title right">
-                                    단가
-                                    <ArrowIcon
-                                        src={
-                                            sortConfig.key === 'UnitCost' && sortConfig.direction === 'ascending'
-                                                ? ArrowUp
-                                                : ArrowDown
-                                        }
-                                    />
-                                </div>
-                            </HeaderTh>
-                            <HeaderTh onClick={() => handleSort('Complete')}>
-                                <div className="title right">
-                                    완료수
-                                    <ArrowIcon
-                                        src={
-                                            sortConfig.key === 'Complete' && sortConfig.direction === 'ascending'
-                                                ? ArrowUp
-                                                : ArrowDown
-                                        }
-                                    />
-                                </div>
-                            </HeaderTh>
-                            <HeaderTh onClick={() => handleSort('Revenue')}>
-                                <div className="title right">
-                                    수익
-                                    <ArrowIcon
-                                        src={
-                                            sortConfig.key === 'Revenue' && sortConfig.direction === 'ascending'
-                                                ? ArrowUp
-                                                : ArrowDown
-                                        }
-                                    />{' '}
-                                </div>
-                            </HeaderTh>
-                        </Tr>
-                        <Tr>
-                            <Th>전체</Th>
-                            <RightAlignedTh>-</RightAlignedTh>
-                            <RightAlignedTh>{formatNumber(calculateTotal(campaignData, 'Complete'))}</RightAlignedTh>
-                            <RightAlignedTh>{formatNumber(calculateTotal(campaignData, 'Revenue'))}</RightAlignedTh>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {campaignData.map((data, index) => (
-                            <Tr key={index}>
-                                <Td>{data.CampaignName}</Td>
-                                <RightAlignedTd>{formatNumber(data.UnitCost)}</RightAlignedTd>
-                                <RightAlignedTd>{formatNumber(data.Complete)}</RightAlignedTd>
-                                <RightAlignedTd>{formatNumber(data.Revenue)}</RightAlignedTd>
-                            </Tr>
-                        ))}
-                    </Tbody>
-                </Table>
-            </TableBox>
+            <FilterSection
+                title="캠페인별 성과"
+                yearState={yearState}
+                monthState={monthState}
+                onYearChange={handleYearChange}
+                onMonthChange={handleMonthChange}
+                showMonth={true}
+            />
+            {!data && <Loading />}
+            {data && (
+                <>
+                    <SectionBox title="캠페인별 수익 비율">
+                        <ChartWrapper>
+                            <Pie options={options} data={chartData} />
+                        </ChartWrapper>
+                    </SectionBox>
+                    <SectionBox title="캠페인별 완료 건수 & 수익">
+                        <Table>
+                            <Thead>
+                                <Tr>
+                                    <HeaderTh onClick={() => handleSort('CampaignName')}>
+                                        <div className="title">
+                                            캠페인명
+                                            {sortConfig.key === 'CampaignName' &&
+                                            sortConfig.direction === 'ascending' ? (
+                                                <ArrowUpIcon />
+                                            ) : (
+                                                <ArrowDownIcon />
+                                            )}
+                                        </div>
+                                    </HeaderTh>
+                                    <HeaderTh onClick={() => handleSort('UnitCost')}>
+                                        <div className="title right">
+                                            단가
+                                            {sortConfig.key === 'UnitCost' && sortConfig.direction === 'ascending' ? (
+                                                <ArrowUpIcon />
+                                            ) : (
+                                                <ArrowDownIcon />
+                                            )}
+                                        </div>
+                                    </HeaderTh>
+                                    <HeaderTh onClick={() => handleSort('Complete')}>
+                                        <div className="title right">
+                                            완료수
+                                            {sortConfig.key === 'Complete' && sortConfig.direction === 'ascending' ? (
+                                                <ArrowUpIcon />
+                                            ) : (
+                                                <ArrowDownIcon />
+                                            )}
+                                        </div>
+                                    </HeaderTh>
+                                    <HeaderTh onClick={() => handleSort('Revenue')}>
+                                        <div className="title right">
+                                            수익
+                                            {sortConfig.key === 'Revenue' && sortConfig.direction === 'ascending' ? (
+                                                <ArrowUpIcon />
+                                            ) : (
+                                                <ArrowDownIcon />
+                                            )}
+                                        </div>
+                                    </HeaderTh>
+                                </Tr>
+                                <Tr>
+                                    <Th>전체</Th>
+                                    <RightAlignTh>-</RightAlignTh>
+                                    <RightAlignTh>
+                                        {formatNumber(calculateTotal(campaignData, 'Complete'))}
+                                    </RightAlignTh>
+                                    <RightAlignTh>{formatNumber(calculateTotal(campaignData, 'Revenue'))}</RightAlignTh>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {campaignData.map((data, index) => (
+                                    <Tr key={index}>
+                                        <Td>{data.CampaignName}</Td>
+                                        <RightAlignTd>{formatNumber(data.UnitCost)}</RightAlignTd>
+                                        <RightAlignTd>{formatNumber(data.Complete)}</RightAlignTd>
+                                        <RightAlignTd>{formatNumber(data.Revenue)}</RightAlignTd>
+                                    </Tr>
+                                ))}
+                            </Tbody>
+                        </Table>
+                    </SectionBox>
+                </>
+            )}
         </>
     );
 };
-
-const SubTitle = styled.span`
-    font-size: 1.375rem;
-    font-weight: 600;
-`;
-
-const TopWrapper = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-`;
-
-const SelectWrapper = styled.div`
-    display: flex;
-    gap: 1rem;
-`;
-
-const GraphBox = styled.section`
-    margin-top: 2.25rem;
-    padding: 1.25rem;
-    background-color: ${({ theme }) => theme.colors.white};
-    border-radius: 1.25rem;
-    overflow: hidden;
-`;
-
-const BoxTitle = styled.span`
-    font-size: 1.5rem;
-    font-weight: 700;
-`;
 
 const ChartWrapper = styled.div`
     width: 100%;
@@ -248,14 +210,6 @@ const ChartWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-`;
-
-const TableBox = styled.section`
-    margin-top: 2.25rem;
-    padding: 1.25rem;
-    background-color: ${({ theme }) => theme.colors.white};
-    border-radius: 1.25rem;
-    overflow: hidden;
 `;
 
 const Table = styled.table`
@@ -286,6 +240,7 @@ const Th = styled.th`
     & > .title {
         display: flex;
         align-items: center;
+        cursor: pointer;
     }
 
     & > .right {
@@ -298,14 +253,13 @@ const HeaderTh = styled(Th)`
     border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
 `;
 
-const RightAlignedTh = styled(Th)`
+const RightAlignTh = styled(Th)`
     text-align: right;
 `;
 
 const Tbody = styled.tbody``;
 
 const Td = styled.td`
-    display: table-cell;
     padding: 1.5rem 0.5rem;
     border-top: 1px solid ${({ theme }) => theme.colors.gray100};
     text-align: left;
@@ -313,12 +267,8 @@ const Td = styled.td`
     white-space: nowrap;
 `;
 
-const RightAlignedTd = styled(Td)`
+const RightAlignTd = styled(Td)`
     text-align: right;
-`;
-
-const ArrowIcon = styled.img`
-    cursor: pointer;
 `;
 
 export default HomePage;

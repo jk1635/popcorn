@@ -57,3 +57,10 @@ export type SortConfig = {
     key: keyof Campaign | null;
     direction: 'ascending' | 'descending';
 };
+
+export type RowState = {
+    [monthlyIndex: number]: {
+        isOpen: boolean;
+        apps: { [appIndex: number]: boolean };
+    };
+};

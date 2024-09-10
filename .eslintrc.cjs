@@ -55,7 +55,7 @@ module.exports = {
                         position : "before"
                     },
                     {
-                        pattern: "{@assets/**,@styles/**,@constants/**,@/**}",
+                        pattern: "{@assets/**,@styles/**,@constants/**,@utils/**,@/**}",
                         group: "internal",
                         position : "before"
                     },
