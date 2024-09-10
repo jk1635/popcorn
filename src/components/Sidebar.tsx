@@ -1,23 +1,50 @@
 import styled from '@emotion/styled';
 
-import Dashboard from '@assets/home.svg';
+import DashboardIcon from '@assets/home.svg?react';
+import TableIcon from '@assets/table.svg?react';
 
-import Popcorn from '/popcorn.svg';
+import PopcornIcon from '/public/popcorn.svg?react';
+import { NavLink } from 'react-router-dom';
+import theme from '@styles/theme.ts';
 
 const Sidebar = () => {
     return (
         <SidebarContainer>
             <LogoWrapper>
-                <LogoIcon src={Popcorn} alt="logo" />
+                <PopcornIcon width="2rem" height="2rem" fill="#2B3674" />
             </LogoWrapper>
             <LinkList>
                 <Item>
-                    <DashboardIcon src={Dashboard} alt="home" />
-                    <Title>Dashboard</Title>
+                    <NavLink to="/" style={({ isActive }) => (isActive ? activeStyle : defaultStyle)}>
+                        <DashboardIcon />
+                        <Title>Dashboard</Title>
+                    </NavLink>
+                </Item>
+                <Item>
+                    <NavLink to="/table" style={({ isActive }) => (isActive ? activeStyle : defaultStyle)}>
+                        <TableIcon />
+                        <Title>Table</Title>
+                    </NavLink>
                 </Item>
             </LinkList>
         </SidebarContainer>
     );
+};
+
+const defaultStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+    color: '#A3AED0',
+    fill: '#A3AED0',
+};
+
+const activeStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+    color: theme.colors.secondary,
+    fill: '#4318FF',
 };
 
 const SidebarContainer = styled.nav`
@@ -36,23 +63,14 @@ const LogoWrapper = styled.div`
     padding: 1.125rem 0;
 `;
 
-const LogoIcon = styled.img`
-    width: 2rem;
-    height: 2rem;
-`;
-
 const LinkList = styled.ul`
-    padding: 1rem 0 1rem 3rem;
+    margin-top: 1rem;
 `;
 
 const Item = styled.li`
     display: flex;
     align-items: center;
-`;
-
-const DashboardIcon = styled.img`
-    width: 1.5rem;
-    height: 1.5rem;
+    padding: 0.75rem 0 0.75rem 3rem;
 `;
 
 const Title = styled.span`

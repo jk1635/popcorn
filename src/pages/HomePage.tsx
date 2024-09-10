@@ -10,11 +10,12 @@ import Select from '@components/Select';
 import { chartColors, initialChartData, monthOptions, options, yearOptions } from '@/constants';
 import { Campaign, Option, SortConfig } from '@/types';
 import { calculateTotal, formatNumber, prepareData } from '@/utils';
-import Arrow from '@assets/arrow-down.svg';
+import ArrowDown from '@assets/arrow-down.svg';
+import ArrowUp from '@assets/arrow-up.svg';
 
 ChartJS.register(CategoryScale, Tooltip, Legend, ArcElement, ...registerables);
 
-const Content = () => {
+const HomePage = () => {
     const { data, mutate } = useAdData();
     const [campaignData, setCampaignData] = useState<Campaign[]>([]);
     const [chartData, setChartData] = useState<ChartData<'pie', number[], string>>(initialChartData);
@@ -101,8 +102,15 @@ const Content = () => {
         }
     }, [sortConfig]);
 
+    useEffect(() => {
+        setSortConfig({
+            key: null,
+            direction: 'ascending',
+        });
+    }, [data]);
+
     return (
-        <ContentContainer>
+        <>
             <TopWrapper>
                 <SubTitle>Report</SubTitle>
                 <SelectWrapper>
@@ -135,25 +143,49 @@ const Content = () => {
                             <HeaderTh onClick={() => handleSort('CampaignName')}>
                                 <div className="title">
                                     캠페인명
-                                    <ArrowIcon src={Arrow} />
+                                    <ArrowIcon
+                                        src={
+                                            sortConfig.key === 'CampaignName' && sortConfig.direction === 'ascending'
+                                                ? ArrowUp
+                                                : ArrowDown
+                                        }
+                                    />
                                 </div>
                             </HeaderTh>
                             <HeaderTh onClick={() => handleSort('UnitCost')}>
                                 <div className="title right">
                                     단가
-                                    <ArrowIcon src={Arrow} />
+                                    <ArrowIcon
+                                        src={
+                                            sortConfig.key === 'UnitCost' && sortConfig.direction === 'ascending'
+                                                ? ArrowUp
+                                                : ArrowDown
+                                        }
+                                    />
                                 </div>
                             </HeaderTh>
                             <HeaderTh onClick={() => handleSort('Complete')}>
                                 <div className="title right">
                                     완료수
-                                    <ArrowIcon src={Arrow} />
+                                    <ArrowIcon
+                                        src={
+                                            sortConfig.key === 'Complete' && sortConfig.direction === 'ascending'
+                                                ? ArrowUp
+                                                : ArrowDown
+                                        }
+                                    />
                                 </div>
                             </HeaderTh>
                             <HeaderTh onClick={() => handleSort('Revenue')}>
                                 <div className="title right">
                                     수익
-                                    <ArrowIcon src={Arrow} />
+                                    <ArrowIcon
+                                        src={
+                                            sortConfig.key === 'Revenue' && sortConfig.direction === 'ascending'
+                                                ? ArrowUp
+                                                : ArrowDown
+                                        }
+                                    />{' '}
                                 </div>
                             </HeaderTh>
                         </Tr>
@@ -176,15 +208,9 @@ const Content = () => {
                     </Tbody>
                 </Table>
             </TableBox>
-        </ContentContainer>
+        </>
     );
 };
-
-const ContentContainer = styled.main`
-    margin-top: 4.25rem;
-    padding: 2.5rem;
-    overflow: auto;
-`;
 
 const SubTitle = styled.span`
     font-size: 1.375rem;
@@ -291,6 +317,8 @@ const RightAlignedTd = styled(Td)`
     text-align: right;
 `;
 
-const ArrowIcon = styled.img``;
+const ArrowIcon = styled.img`
+    cursor: pointer;
+`;
 
-export default Content;
+export default HomePage;

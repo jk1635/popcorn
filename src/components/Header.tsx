@@ -1,11 +1,26 @@
 import styled from '@emotion/styled';
+import { useLocation } from 'react-router-dom';
 
 const Header = () => {
+    const location = useLocation();
+    const title = getTitle(location.pathname);
+
     return (
         <HeaderContainer>
-            <Title>Dashboard</Title>
+            <Title>{title}</Title>
         </HeaderContainer>
     );
+};
+
+const getTitle = pathname => {
+    switch (pathname) {
+        case '/':
+            return 'Dashboard';
+        case '/table':
+            return 'Table';
+        default:
+            return 'Page Not Found';
+    }
 };
 
 const HeaderContainer = styled.header`
