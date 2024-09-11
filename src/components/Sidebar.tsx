@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import DashboardIcon from '@assets/home.svg?react';
+import HomeIcon from '@assets/home.svg?react';
 import TableIcon from '@assets/table.svg?react';
 
 import PopcornIcon from '/public/popcorn.svg?react';
@@ -20,8 +20,8 @@ const Sidebar = () => {
             <LinkList>
                 <Item>
                     <NavLink to="/" style={({ isActive }) => (isActive ? activeStyle : defaultStyle)}>
-                        <DashboardIcon />
-                        <Title>Dashboard</Title>
+                        <HomeIcon />
+                        <Title>Home</Title>
                     </NavLink>
                 </Item>
                 <Item>

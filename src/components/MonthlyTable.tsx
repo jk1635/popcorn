@@ -2,11 +2,19 @@ import styled from '@emotion/styled';
 
 import Badge from '@components/Badge';
 
+import { Monthly } from '@/types';
+import { calculateMonth, calculateTotal, convertDate, formatNumber } from '@/utils';
 import ArrowDownIcon from '@assets/circle-arrow-down.svg?react';
 import ArrowUpIcon from '@assets/circle-arrow-up.svg?react';
-import { calculateMonth, calculateTotal, convertDate, formatNumber } from '@utils/';
 
-const MonthlyTable = ({ monthlyData, rowState, toggleMonthlyRow, toggleAppRow }) => {
+type MonthlyTableProps = {
+    monthlyData: Monthly[];
+    rowState: any;
+    toggleMonthlyRow: any;
+    toggleAppRow: any;
+};
+
+const MonthlyTable = ({ monthlyData, rowState, toggleMonthlyRow, toggleAppRow }: MonthlyTableProps) => {
     return (
         <Table>
             <Thead>

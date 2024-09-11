@@ -64,3 +64,9 @@ export type RowState = {
         apps: { [appIndex: number]: boolean };
     };
 };
+
+export type Chart = {
+    id: string;
+    label: string;
+    value: number;
+};

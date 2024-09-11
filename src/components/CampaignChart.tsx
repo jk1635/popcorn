@@ -2,7 +2,9 @@ import styled from '@emotion/styled';
 
 import PieChart from '@components/Pie';
 
-const CampaignChart = ({ chartData }) => {
+import { Chart } from '@/types';
+
+const CampaignChart = ({ chartData }: { chartData: Chart[] }) => {
     return (
         <ChartWrapper>
             <PieChart data={chartData} />

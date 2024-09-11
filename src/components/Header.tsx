@@ -13,10 +13,10 @@ const Header = () => {
     );
 };
 
-const getTitle = pathname => {
+const getTitle = (pathname: string) => {
     switch (pathname) {
         case '/':
-            return 'Dashboard';
+            return 'Home';
         case '/table':
             return 'Table';
         default:

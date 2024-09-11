@@ -8,14 +8,14 @@ import FilterSection from '@components/FilterSection';
 import Loading from '@components/Loading';
 import SectionBox from '@components/SectionBox';
 
-import { Campaign, Option, SortConfig } from '@/types';
+import { Campaign, Chart, Option, SortConfig } from '@/types';
 import { prepareData } from '@/utils';
 
 const HomePage = () => {
-    const { data, mutate } = useAdData();
+    const { data, mutate, isPending } = useAdData();
 
     const [campaignData, setCampaignData] = useState<Campaign[]>([]);
-    const [chartData, setChartData] = useState([]);
+    const [chartData, setChartData] = useState<Chart[]>([]);
     const [yearState, setYearState] = useState<number>(2018);
     const [monthState, setMonthState] = useState<number>(1);
     const [sortConfig, setSortConfig] = useState<SortConfig>({
@@ -99,8 +99,8 @@ const HomePage = () => {
                 onMonthChange={handleMonthChange}
                 showMonth={true}
             />
-            {!data && <Loading />}
-            {data && (
+            {isPending && <Loading />}
+            {!isPending && (
                 <>
                     <SectionBox title="캠페인별 수익 비율">
                         <CampaignChart chartData={chartData} />

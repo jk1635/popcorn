@@ -1,16 +1,18 @@
-export const formatNumber = (number): string => {
+import { App, Campaign, Monthly, Payment } from '@/types';
+
+export const formatNumber = (number: any) => {
     return number.toLocaleString();
 };
 
-export const calculateUnitCost = (revenue, complete) => {
+export const calculateUnitCost = (revenue: number, complete: number) => {
     return complete ? revenue / complete : 0;
 };
 
-export const calculateTotal = (number, key) => {
-    return number.reduce((acc, cur) => acc + (cur[key] || 0), 0);
+export const calculateTotal = (number: any, key: any) => {
+    return number.reduce((acc: any, cur: any) => acc + (cur[key] || 0), 0);
 };
 
-export const prepareData = data => {
+export const prepareData = (data: Payment): Campaign[] => {
     return data?.Monthly.flatMap(
         month =>
             month.App.flatMap(app =>
@@ -22,22 +24,22 @@ export const prepareData = data => {
     );
 };
 
-export const prepareCampaignData = app => {
+export const prepareCampaignData = (app: App): Campaign[] => {
     return app.Campaign.map(campaign => ({
         ...campaign,
     }));
 };
 
-export const prepareAppData = month => {
+export const prepareAppData = (month: Monthly): App[] => {
     return month.App.map(app => ({
         ...app,
         Campaign: prepareCampaignData(app),
     }));
 };
 
-export const prepareMonthlyData = data => {
+export const prepareMonthlyData = (data: Payment): Monthly[] => {
     return (
-        data?.Monthly.map(month => ({
+        data.Monthly.map(month => ({
             ...month,
             App: prepareAppData(month),
         })) || []

@@ -25,16 +25,9 @@ module.exports = {
 
         'react/prop-types': 'off',
 
-        'react-hooks/rules-of-hooks': 'warn',
-        'react-hooks/exhaustive-deps': [
-            'warn',
-            {
-                additionalHooks: 'useRecoilCallback',
-            },
-        ],
-
         '@typescript-eslint/no-unused-vars': 'warn',
         '@typescript-eslint/no-explicit-any': 'warn',
+
         'import/named': 'off',
         'import/newline-after-import': 'warn',
         'import/no-extraneous-dependencies': 'off',

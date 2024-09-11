@@ -2,7 +2,7 @@ import { ResponsivePie } from '@nivo/pie';
 
 import { calculateTotal, formatNumber } from '@/utils';
 
-const PieChart = ({ data }) => (
+const PieChart = ({ data }: any) => (
     <ResponsivePie
         data={data}
         margin={{ top: 40, right: 80, bottom: 80, left: 80 }}

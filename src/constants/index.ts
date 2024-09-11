@@ -23,7 +23,7 @@ export const monthOptions: Option[] = [
     { value: 12, label: '12' },
 ];
 
-export const getStatusLabel = status => {
+export const getStatusLabel = (status: number | null) => {
     switch (status) {
         case 1:
             return { label: '출금 요청', color: '#965E00', backgroundColor: '#FFECCC' };
