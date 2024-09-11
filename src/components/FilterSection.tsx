@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import Select from '@components/Select.tsx';
+import Select from '@components/Select';
 
 import { monthOptions, yearOptions } from '@/constants';
 import { Option } from '@/types';

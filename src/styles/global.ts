@@ -15,7 +15,6 @@ const global = css`
 
     body {
         font-family: 'Noto Sans KR', 'Inter', sans-serif;
-        overflow: hidden;
         font-size: 1rem;
         line-height: 1;
         font-weight: 400;

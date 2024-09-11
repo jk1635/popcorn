@@ -7,7 +7,7 @@ import PopcornIcon from '/public/popcorn.svg?react';
 
 import { Link, NavLink } from 'react-router-dom';
 
-import theme from '@styles/theme.ts';
+import theme from '@styles/theme';
 
 const Sidebar = () => {
     return (

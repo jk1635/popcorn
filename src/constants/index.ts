@@ -1,17 +1,5 @@
 import { Option } from '@/types';
-
-export const chartColors = [
-    '#FEAEAE',
-    '#FBE38E',
-    '#AEC9FE',
-    '#A9F4D0',
-    '#9A89FF',
-    '#FDD09F',
-    '#FD9CFF',
-    '#FED0EE',
-    '#D0E8FF',
-    '#DBAEFF',
-];
+import theme from '@styles/theme.ts';
 
 export const yearOptions: Option[] = [
     { value: 2018, label: '2018' },
@@ -35,12 +23,23 @@ export const monthOptions: Option[] = [
     { value: 12, label: '12' },
 ];
 
-export const initialChartData = {
-    labels: [],
-    datasets: [],
-};
-
-export const options = {
-    responsive: true,
-    maintainAspectRatio: false,
+export const getStatusLabel = status => {
+    switch (status) {
+        case 1:
+            return { label: '출금 요청', color: '#965E00', backgroundColor: '#FFECCC' };
+        case 2:
+            return { label: '출금 거절', color: '#D30000', backgroundColor: '#FFE0E0' };
+        case 3:
+            return { label: '출금 완료', color: '#007F00', backgroundColor: '#CDFFCD' };
+        case 4:
+            return { label: '출금 취소', color: '#6E6893', backgroundColor: '#E6E6F2' };
+        case 5:
+            return {
+                label: '출금 가능',
+                color: `${theme.colors.secondary}`,
+                backgroundColor: `${theme.colors.gray300}`,
+            };
+        default:
+            throw new Error(`status 에러 : ${status}`);
+    }
 };

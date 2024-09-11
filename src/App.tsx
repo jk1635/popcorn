@@ -2,14 +2,14 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { Global, ThemeProvider } from '@emotion/react';
 
-import Layout from '@components/Layout.tsx';
+import Layout from '@components/Layout';
 import NotFound from '@components/Notfound';
 
 import global from '@styles/global';
 import theme from '@styles/theme';
 
-import HomePage from '@pages/HomePage.tsx';
-import TablePage from '@pages/TablePage.tsx';
+import HomePage from '@pages/HomePage';
+import TablePage from '@pages/TablePage';
 
 function App() {
     return (

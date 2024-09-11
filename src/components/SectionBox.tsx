@@ -21,7 +21,6 @@ const SectionContainer = styled.section`
     padding: 1.5rem;
     background-color: ${({ theme }) => theme.colors.white};
     border-radius: 1.25rem;
-    overflow: hidden;
 `;
 
 const BoxTitle = styled.span`
