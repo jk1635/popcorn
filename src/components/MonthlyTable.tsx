@@ -1,17 +1,19 @@
+import { Fragment } from 'react';
+
 import styled from '@emotion/styled';
 
 import Badge from '@components/Badge';
 
-import { Monthly } from '@/types';
+import { Monthly, RowState } from '@/types';
 import { calculateMonth, calculateTotal, convertDate, formatNumber } from '@/utils';
 import ArrowDownIcon from '@assets/circle-arrow-down.svg?react';
 import ArrowUpIcon from '@assets/circle-arrow-up.svg?react';
 
 type MonthlyTableProps = {
     monthlyData: Monthly[];
-    rowState: any;
-    toggleMonthlyRow: any;
-    toggleAppRow: any;
+    rowState: RowState;
+    toggleMonthlyRow: (monthlyIndex: number) => void;
+    toggleAppRow: (monthlyIndex: number, appIndex: number) => void;
 };
 
 const MonthlyTable = ({ monthlyData, rowState, toggleMonthlyRow, toggleAppRow }: MonthlyTableProps) => {
@@ -41,8 +43,8 @@ const MonthlyTable = ({ monthlyData, rowState, toggleMonthlyRow, toggleAppRow }:
             </Thead>
             <Tbody>
                 {monthlyData.map((monthly, monthlyIndex) => (
-                    <>
-                        <Tr key={monthly.AppKey}>
+                    <Fragment key={`monthly-${monthlyIndex}`}>
+                        <Tr>
                             <Td>
                                 <DropdownButton onClick={() => toggleMonthlyRow(monthlyIndex)}>
                                     {rowState[monthlyIndex]?.isOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
@@ -60,7 +62,7 @@ const MonthlyTable = ({ monthlyData, rowState, toggleMonthlyRow, toggleAppRow }:
                         {rowState[monthlyIndex]?.isOpen &&
                             monthly.App.map((app, appIndex) => (
                                 <>
-                                    <CampaignBg key={app.AppName}>
+                                    <CampaignBg key={`campaign-${monthlyIndex}-${appIndex}`}>
                                         <Td style={{ paddingLeft: '2rem' }}>
                                             <DropdownButton onClick={() => toggleAppRow(monthlyIndex, appIndex)}>
                                                 {rowState[monthlyIndex]?.apps?.[appIndex] ? (
@@ -103,7 +105,7 @@ const MonthlyTable = ({ monthlyData, rowState, toggleMonthlyRow, toggleAppRow }:
                                     )}
                                 </>
                             ))}
-                    </>
+                    </Fragment>
                 ))}
             </Tbody>
         </Table>

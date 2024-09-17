@@ -11,11 +11,11 @@ import { Monthly, Option, RowState } from '@/types';
 import { prepareMonthlyData } from '@/utils';
 
 const TablePage = () => {
-    const { data, mutate } = useAdData();
-
     const [yearState, setYearState] = useState<number>(2018);
     const [monthlyData, setMonthlyData] = useState<Monthly[]>([]);
     const [rowState, setRowState] = useState<RowState>({});
+
+    const { data, isPending } = useAdData({ yearState });
 
     const handleYearChange = (selectedOption: Option | null) => {
         if (!selectedOption) return;
@@ -47,22 +47,17 @@ const TablePage = () => {
     };
 
     useEffect(() => {
-        const params = {
-            search_year: yearState,
-        };
-        mutate(params, {
-            onSuccess: data => {
-                const processedData = prepareMonthlyData(data);
-                setMonthlyData(processedData);
-                setRowState({});
-            },
-        });
-    }, [yearState, mutate]);
+        if (data) {
+            const processedData = prepareMonthlyData(data.Payment);
+            setMonthlyData(processedData);
+            setRowState({});
+        }
+    }, [data]);
 
     return (
         <>
             <FilterSection title="월별 성과" yearState={yearState} onYearChange={handleYearChange} />
-            {!data && <Loading />}
+            {isPending && !data && <Loading />}
             {data && (
                 <SectionBox title="월별 성과">
                     <MonthlyTable

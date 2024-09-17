@@ -12,8 +12,6 @@ import { Campaign, Chart, Option, SortConfig } from '@/types';
 import { prepareData } from '@/utils';
 
 const HomePage = () => {
-    const { data, mutate, isPending } = useAdData();
-
     const [campaignData, setCampaignData] = useState<Campaign[]>([]);
     const [chartData, setChartData] = useState<Chart[]>([]);
     const [yearState, setYearState] = useState<number>(2018);
@@ -22,6 +20,8 @@ const HomePage = () => {
         key: null,
         direction: 'ascending',
     });
+
+    const { data, isPending } = useAdData({ yearState, monthState });
 
     const handleYearChange = (selectedOption: Option | null) => {
         if (!selectedOption) return;
@@ -37,7 +37,7 @@ const HomePage = () => {
 
     useEffect(() => {
         if (data) {
-            const preparedData = prepareData(data);
+            const preparedData = prepareData(data.Payment);
             setCampaignData(preparedData);
             const nivoChartData = preparedData.map((campaign, index) => ({
                 id: `${campaign.CampaignName}-${index + 1}`,
@@ -50,18 +50,8 @@ const HomePage = () => {
     }, [data]);
 
     useEffect(() => {
-        if (yearState && monthState) {
-            const params = {
-                search_year: yearState,
-                search_month: monthState,
-            };
-            mutate(params);
-        }
-    }, [yearState, monthState]);
-
-    useEffect(() => {
         if (data && sortConfig.key) {
-            const sortedData = prepareData(data).sort((a, b) => {
+            const sortedData = prepareData(data.Payment).sort((a, b) => {
                 const valueA = a[sortConfig.key as keyof Campaign];
                 const valueB = b[sortConfig.key as keyof Campaign];
 
@@ -99,8 +89,8 @@ const HomePage = () => {
                 onMonthChange={handleMonthChange}
                 showMonth={true}
             />
-            {isPending && <Loading />}
-            {!isPending && (
+            {isPending && !data && <Loading />}
+            {data && (
                 <>
                     <SectionBox title="캠페인별 수익 비율">
                         <CampaignChart chartData={chartData} />
